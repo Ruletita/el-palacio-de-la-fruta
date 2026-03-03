@@ -227,7 +227,10 @@
             <h2 id="modal-title" class="text-xl font-black mb-8 text-red-700 text-center uppercase tracking-widest italic font-black">Editor</h2>
             <input type="hidden" id="form-id">
             <div class="space-y-4">
-                <input type="text" id="form-name" placeholder="Nombre" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                <div class="flex gap-2">
+                    <input type="text" id="form-icon" placeholder="🍎" title="Pega un emoji aquí" class="w-16 p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-center text-xl focus:ring-2 focus:ring-red-500">
+                    <input type="text" id="form-name" placeholder="Nombre" class="flex-1 w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <input type="number" id="form-price" placeholder="Precio ($)" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-black text-red-600 text-sm focus:ring-2 focus:ring-red-500">
                     <select id="form-unit" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
@@ -404,6 +407,7 @@
             if (!isAdminAuthenticated) return;
             const p = products.find(x => x.id === id);
             document.getElementById('form-id').value = p.id;
+            document.getElementById('form-icon').value = p.icon || getIconForCat(p.category);
             document.getElementById('form-name').value = p.name;
             document.getElementById('form-price').value = p.price;
             document.getElementById('form-unit').value = p.unit;
@@ -416,6 +420,7 @@
         window.openAddProduct = () => {
             if (!isAdminAuthenticated) return;
             document.getElementById('form-id').value = "";
+            document.getElementById('form-icon').value = "🍎";
             document.getElementById('form-name').value = "";
             document.getElementById('form-price').value = "";
             document.getElementById('modal-title').innerText = "Nuevo Item";
@@ -431,7 +436,7 @@
                 price: parseFloat(document.getElementById('form-price').value),
                 unit: document.getElementById('form-unit').value,
                 category: document.getElementById('form-cat').value,
-                icon: getIconForCat(document.getElementById('form-cat').value)
+                icon: document.getElementById('form-icon').value || getIconForCat(document.getElementById('form-cat').value)
             };
             try {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id), data, { merge: true });
