@@ -67,13 +67,13 @@
     <!-- Header -->
     <header class="header-main p-4 sticky top-0 z-50 shadow-md no-print">
         <div class="container mx-auto flex justify-between items-center max-w-6xl">
-            <!-- Acceso Admin: 3 clics rápidos aquí -->
+            <!-- Acceso Admin: 3 toques rápidos aquí -->
             <div id="admin-trigger" class="flex items-center gap-2 cursor-pointer select-none active:scale-95 transition-transform" onclick="window.handleAdminClick()">
                 <i class="fas fa-apple-alt text-2xl"></i> 
                 <h1 class="text-lg font-black tracking-tighter uppercase leading-none">El Palacio de la Fruta</h1>
             </div>
             <div class="flex gap-3 items-center">
-                <div id="admin-badge" class="hidden bg-yellow-400 text-red-800 text-[9px] px-2 py-1 rounded-full font-black uppercase shadow-sm">Modo Dueño</div>
+                <div id="admin-badge" class="hidden bg-yellow-400 text-red-800 text-[9px] px-2 py-0.5 rounded-full font-black uppercase shadow-sm">Dueño</div>
                 <button onclick="window.toggleCart()" class="relative p-2 text-white active:scale-90 transition-transform">
                     <i class="fas fa-shopping-basket text-2xl"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-apple-green text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-black border-2 border-red-600">0</span>
@@ -88,7 +88,7 @@
             <span class="font-bold text-red-700 text-xs uppercase italic"><i class="fas fa-user-shield mr-2"></i>Gestión de Precios</span>
             <div class="flex gap-2">
                 <button onclick="window.openAddProduct()" class="bg-red-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-sm">Nuevo Item</button>
-                <button onclick="window.handleLogout()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Salir</button>
+                <button onclick="window.handleLogout()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Cerrar Sesión</button>
             </div>
         </div>
     </div>
@@ -114,61 +114,62 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer-main mt-16 p-8 md:p-12 no-print">
+    <footer class="footer-main mt-16 p-8 md:p-12 no-print text-white">
         <div class="container mx-auto max-w-6xl">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left items-start">
                 <div class="space-y-4">
-                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Ubicación</h3>
-                    <div class="space-y-1">
-                        <p class="font-black text-white text-xl">Pres. Hipólito Yrigoyen 2124</p>
-                        <p class="text-xs font-bold text-white/80 uppercase">Florida, Buenos Aires</p>
+                    <h3 class="font-black uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Ubicación</h3>
+                    <div class="space-y-1 text-white">
+                        <p class="font-black text-xl leading-tight">Pres. Hipólito Yrigoyen 2124</p>
+                        <p class="text-xs font-bold opacity-80 uppercase tracking-tighter">Florida, Buenos Aires</p>
                     </div>
-                    <a href="https://maps.app.goo.gl/gbHA4MJhwgeaN9e36" target="_blank" class="inline-flex items-center gap-2 bg-white text-red-600 px-5 py-2.5 rounded-full font-black text-[10px] shadow-lg active:scale-95 transition-transform uppercase">
+                    <a href="https://maps.app.goo.gl/gbHA4MJhwgeaN9e36" target="_blank" class="inline-flex items-center gap-2 bg-white text-red-600 px-6 py-3 rounded-full font-black text-[10px] shadow-lg active:scale-95 transition-transform uppercase tracking-widest">
                         <i class="fas fa-map-marker-alt"></i> Cómo llegar
                     </a>
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Teléfonos</h3>
-                    <div class="space-y-4">
+                    <h3 class="font-black uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Teléfonos</h3>
+                    <div class="space-y-4 text-white">
                         <div class="flex items-center justify-center md:justify-start gap-3">
-                            <i class="fas fa-phone-alt text-xl"></i>
+                            <i class="fas fa-phone-alt text-xl text-yellow-300"></i>
                             <div>
-                                <p class="font-black text-xl leading-none">4796-4530</p>
-                                <p class="text-[9px] uppercase font-bold text-white/70">Teléfono Fijo del local</p>
+                                <p class="font-black text-xl leading-none tracking-tighter">4796-4530</p>
+                                <p class="text-[9px] uppercase font-bold opacity-70">Teléfono Fijo del local</p>
                             </div>
                         </div>
                         <a href="https://wa.me/5491150126496" target="_blank" class="flex items-center justify-center md:justify-start gap-3 active:scale-95 transition-transform">
                             <i class="fab fa-whatsapp text-2xl text-green-400"></i>
                             <div>
                                 <p class="font-bold text-xl leading-none">+54 9 11 5012-6496</p>
-                                <p class="text-[9px] uppercase font-bold text-white/70">WhatsApp Pedidos</p>
+                                <p class="text-[9px] uppercase font-bold opacity-70">WhatsApp Pedidos</p>
                             </div>
                         </a>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Atención</h3>
-                    <div class="bg-black/10 p-5 rounded-2xl w-full">
-                        <p class="font-black text-xs uppercase text-white/90 mb-1">Lunes a Sábados</p>
+                    <h3 class="font-black uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block text-white">Horarios</h3>
+                    <div class="bg-black/10 p-5 rounded-2xl w-full border border-white/5">
+                        <p class="font-black text-xs uppercase opacity-90 mb-1">Lunes a Sábados</p>
                         <p class="text-2xl font-black text-yellow-300 leading-tight">07:00 a 20:30 hs</p>
-                        <p class="text-[9px] mt-2 italic font-bold text-white/50 uppercase">Domingos y feriados cerrado</p>
+                        <div class="h-[1px] bg-yellow-400/20 my-2"></div>
+                        <p class="text-[9px] italic font-bold opacity-50 uppercase text-white">Domingos y feriados cerrado</p>
                     </div>
                 </div>
             </div>
-            <div class="text-center mt-12 pt-6 border-t border-yellow-200/10 text-[9px] font-bold uppercase tracking-widest opacity-40">
+            <div class="text-center mt-12 pt-6 border-t border-yellow-200/10 text-[9px] font-bold uppercase tracking-widest opacity-40 text-white">
                 © 2024 EL PALACIO DE LA FRUTA
             </div>
         </div>
     </footer>
 
-    <!-- Modal Login Seguro -->
+    <!-- Modal Login -->
     <div id="admin-login-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-md">
         <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl border-2 border-apple-yellow">
             <div class="text-center mb-6">
                 <i class="fas fa-user-shield text-red-600 text-3xl mb-2"></i>
-                <h2 class="font-black uppercase text-gray-800 text-sm tracking-widest">Acceso Dueño</h2>
+                <h2 class="font-black uppercase text-gray-800 text-sm tracking-widest">Acceso Propietario</h2>
             </div>
             <form id="login-form" class="space-y-4" onsubmit="window.handleLoginSubmit(event)">
                 <div>
@@ -181,7 +182,7 @@
                 </div>
                 <div id="login-error" class="text-red-500 text-[10px] font-bold text-center h-4"></div>
                 <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="window.closeLogin()" class="flex-1 bg-gray-100 py-4 rounded-xl font-black text-gray-400 uppercase text-[10px]">Cancelar</button>
+                    <button type="button" onclick="window.closeLogin()" class="flex-1 bg-gray-100 py-4 rounded-xl font-black text-gray-400 uppercase text-[10px]">Cerrar</button>
                     <button type="submit" id="login-btn" class="flex-1 bg-red-600 text-white py-4 rounded-xl font-black shadow-lg uppercase text-[10px]">Entrar</button>
                 </div>
             </form>
@@ -190,20 +191,20 @@
 
     <!-- Carrito -->
     <div id="cart-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-end sm:items-center justify-center no-print">
-        <div class="bg-white w-full max-w-lg rounded-t-[2rem] sm:rounded-[2rem] p-6 max-h-[90vh] overflow-y-auto border-t-8 border-apple-red shadow-2xl relative">
+        <div class="bg-white w-full max-w-lg rounded-t-[2.5rem] sm:rounded-[2.5rem] p-6 max-h-[92vh] overflow-y-auto border-t-8 border-apple-red shadow-2xl relative">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-black text-red-700 uppercase italic tracking-tighter">Mi Pedido</h2>
-                <button onclick="window.toggleCart()" class="text-gray-400 text-4xl p-2">&times;</button>
+                <button onclick="window.toggleCart()" class="text-gray-400 text-5xl p-2">&times;</button>
             </div>
             <div id="cart-list" class="space-y-2 mb-6"></div>
 
             <div class="mb-6">
                 <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block font-black">¿Alguna aclaración?</label>
-                <textarea id="order-notes" rows="2" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none text-sm focus:ring-2 focus:ring-red-500 transition-all no-scrollbar" placeholder="Ej: Timbre no funciona..."></textarea>
+                <textarea id="order-notes" rows="2" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none text-sm focus:ring-2 focus:ring-red-500 transition-all no-scrollbar" placeholder="Ej: No funciona el timbre..."></textarea>
             </div>
 
             <div class="bg-green-50 p-5 rounded-2xl mb-6 border border-green-100">
-                <button id="btn-location" onclick="window.captureGPS()" class="w-full text-[10px] bg-white border-2 border-apple-green text-apple-green px-4 py-3 rounded-xl font-black active:bg-green-600 active:text-white uppercase tracking-widest">UBICACIÓN GPS</button>
+                <button id="btn-location" onclick="window.captureGPS()" class="w-full text-[10px] bg-white border-2 border-apple-green text-apple-green px-4 py-4 rounded-xl font-black active:bg-green-600 active:text-white uppercase tracking-widest">ADJUNTAR UBICACIÓN GPS</button>
                 <p id="location-ok" class="hidden text-[10px] text-green-700 font-black mt-3 text-center uppercase tracking-widest"><i class="fas fa-check"></i> Ubicación adjunta</p>
             </div>
 
@@ -213,79 +214,64 @@
                     <span class="text-apple-red" id="cart-total-display">$0</span>
                 </div>
                 <div class="grid grid-cols-2 gap-4 pb-4">
-                    <button onclick="window.printSimpleTicket()" class="bg-gray-100 text-gray-600 font-black py-4 rounded-xl active:bg-gray-200 uppercase text-[10px] tracking-widest">RESUMEN</button>
-                    <button onclick="window.sendToWhatsApp()" class="bg-green-600 text-white font-black py-4 rounded-xl shadow-lg active:bg-green-700 uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">PEDIR</button>
+                    <button onclick="window.printSimpleTicket()" class="bg-gray-100 text-gray-600 font-black py-4 rounded-xl active:bg-gray-200 uppercase text-[10px] tracking-widest font-black">RESUMEN</button>
+                    <button onclick="window.sendToWhatsApp()" class="bg-green-600 text-white font-black py-4 rounded-xl shadow-lg active:bg-green-700 uppercase text-[10px] tracking-widest flex items-center justify-center gap-2"><i class="fab fa-whatsapp text-lg"></i> PEDIR</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal Editor -->
+    <!-- Modal Admin Editor -->
     <div id="admin-modal" class="fixed inset-0 bg-black/95 z-[110] hidden flex items-center justify-center p-4 no-print">
         <div class="bg-white w-full max-w-md rounded-[2rem] p-8 border-4 border-apple-yellow shadow-2xl">
-            <h2 id="modal-title" class="text-xl font-black mb-8 text-red-700 text-center uppercase tracking-widest italic">Editor</h2>
+            <h2 id="modal-title" class="text-xl font-black mb-8 text-red-700 text-center uppercase tracking-widest italic font-black">Editor</h2>
             <input type="hidden" id="form-id">
             <div class="space-y-4">
-                <div>
-                    <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Nombre</label>
-                    <input type="text" id="form-name" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
-                </div>
+                <input type="text" id="form-name" placeholder="Nombre" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Precio ($)</label>
-                        <input type="number" id="form-price" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-black text-red-600 text-sm focus:ring-2 focus:ring-red-500">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Unidad</label>
-                        <select id="form-unit" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
-                            <option value="kg">Por Kilo</option>
-                            <option value="unidad">Unidad</option>
-                            <option value="maple">Maple</option>
-                            <option value="bolsa">Bolsa</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Categoría</label>
-                    <select id="form-cat" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
-                        <option value="fruta">Fruta</option>
-                        <option value="verdura">Verdura</option>
-                        <option value="almacen">Almacén/Envasados</option>
-                        <option value="carbon">Otros/Carbón</option>
+                    <input type="number" id="form-price" placeholder="Precio ($)" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-black text-red-600 text-sm focus:ring-2 focus:ring-red-500">
+                    <select id="form-unit" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                        <option value="kg">Por Kilo</option>
+                        <option value="unidad">Unidad</option>
+                        <option value="maple">Maple</option>
+                        <option value="bolsa">Bolsa</option>
                     </select>
                 </div>
+                <select id="form-cat" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                    <option value="fruta">Fruta</option>
+                    <option value="verdura">Verdura</option>
+                    <option value="almacen">Almacén/Envasados</option>
+                    <option value="carbon">Otros/Carbón</option>
+                </select>
                 <div class="flex gap-4 mt-8">
-                    <button onclick="window.closeAdminModal()" class="flex-1 bg-gray-100 py-4 rounded-2xl font-black text-gray-500 uppercase text-[10px]">Cerrar</button>
-                    <button onclick="window.submitProduct()" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase text-[10px]">Guardar</button>
+                    <button onclick="window.closeAdminModal()" class="flex-1 bg-gray-100 py-4 rounded-xl font-black text-gray-500 uppercase text-[10px]">Cerrar</button>
+                    <button onclick="window.submitProduct()" class="flex-1 bg-red-600 text-white py-4 rounded-xl font-black shadow-lg uppercase text-[10px]">Guardar</button>
                 </div>
-                <button onclick="window.handleDelete()" id="btn-delete" class="w-full text-red-400 text-[9px] font-black mt-4 uppercase pt-4 border-t border-gray-100">Eliminar Producto</button>
+                <button onclick="window.handleDelete()" id="btn-delete" class="w-full text-red-400 text-[9px] font-black mt-4 uppercase pt-4 border-t border-gray-100 font-black">Eliminar Producto</button>
             </div>
         </div>
     </div>
 
-    <!-- Toast Notificación -->
-    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/95 text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest opacity-0 pointer-events-none z-[100]">¡Añadido!</div>
-
-    <!-- Ticket Impresión -->
-    <div id="ticket-print-area" class="hidden p-8 bg-white text-black font-mono text-xs leading-tight">
-        <div class="text-center border-b-2 border-black pb-4 mb-4">
-            <h2 class="text-base font-bold uppercase tracking-tighter">EL PALACIO DE LA FRUTA</h2>
-            <p id="ticket-timestamp"></p>
-        </div>
-        <div id="ticket-items" class="mb-6 space-y-1"></div>
-        <div class="border-t-2 border-black pt-4 font-bold flex justify-between text-base">
-            <span>TOTAL:</span>
-            <span id="ticket-total-val"></span>
-        </div>
-    </div>
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest opacity-0 pointer-events-none z-[100] shadow-2xl">¡Añadido!</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'palacio-fruta-mobile';
+        // ==========================================
+        // CONFIGURACIÓN REAL DE FIREBASE DE AGUS
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCge2C_1V4ACuOUIqP9Maq5SVJnHZ3Jr40",
+            authDomain: "palacio-de-la-fruta.firebaseapp.com",
+            projectId: "palacio-de-la-fruta",
+            storageBucket: "palacio-de-la-fruta.firebasestorage.app",
+            messagingSenderId: "327232749897",
+            appId: "1:327232749897:web:3b7fe59613f8225cb09a98"
+        };
+        const appId = 'palacio-fruta-v2'; // Coleccion raiz
         const WHATSAPP_TEL = "5491150126496";
 
         const app = initializeApp(firebaseConfig);
@@ -300,35 +286,35 @@
         let adminClickTimer = null;
         let unsubscribeProducts = null;
 
-        // AUTH & LOAD (Regla 3)
+        // ESTADO DE SESIÓN
         onAuthStateChanged(auth, async (user) => {
             if (unsubscribeProducts) { unsubscribeProducts(); unsubscribeProducts = null; }
-
             if (user) {
                 isAdminAuthenticated = !user.isAnonymous;
                 if (isAdminAuthenticated) { enableAdminUI(); } 
                 else { disableAdminUI(); }
-                loadProducts(user);
+                loadProducts();
             } else {
-                initAuth();
+                initAuth(); // Si no hay usuario, iniciamos anónimo
             }
         });
 
         async function initAuth() {
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else { await signInAnonymously(auth); }
-            } catch (e) { console.error(e); }
+                await signInAnonymously(auth);
+            } catch (e) { 
+                console.error("Error Auth: Activa 'Anónimo' en Firebase > Authentication.", e); 
+            }
         }
 
-        function loadProducts(user) {
-            if (!user) return;
+        // CARGAR BASE DE DATOS
+        function loadProducts() {
+            if (!db) return;
             const prodRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
             unsubscribeProducts = onSnapshot(prodRef, (snapshot) => {
                 products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderGrid();
-            }, (error) => { console.warn("Permissions error:", error.message); });
+            }, (error) => { console.warn("Firestore permissions:", error.message); });
         }
 
         function enableAdminUI() {
@@ -376,7 +362,6 @@
         window.closeLogin = () => document.getElementById('admin-login-modal').classList.add('hidden');
         window.toggleCart = () => document.getElementById('cart-modal').classList.toggle('hidden');
 
-        // UI ACTIONS
         window.filterCategory = (category) => {
             document.querySelectorAll('.cat-btn').forEach(b => {
                 b.className = "cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap";
@@ -394,7 +379,7 @@
                 gpsUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
                 document.getElementById('location-ok').classList.remove('hidden');
                 btn.classList.add('hidden');
-            }, () => { alert("Activa el GPS."); btn.innerText = "REINTENTAR"; });
+            }, () => { alert("Activa el GPS del celular."); btn.innerText = "REINTENTAR"; });
         };
 
         window.sendToWhatsApp = () => {
@@ -406,25 +391,15 @@
                 text += `• *${item.name}*\n   ${item.displayQty} ➔ *$${item.totalPrice.toLocaleString()}*\n\n`;
                 total += item.totalPrice;
             });
-            if (notes) text += `📝 *ACLARACIÓN:* ${notes}\n\n`;
+            if (notes) text += `📝 *ACLARACIONES:* ${notes}\n\n`;
             text += `*TOTAL ESTIMADO: $${total.toLocaleString()}*`;
             if (gpsUrl) text += `\n\n📍 *ENTREGAR AQUÍ:* ${gpsUrl}`;
             window.open(`https://wa.me/${WHATSAPP_TEL}?text=${encodeURIComponent(text)}`, '_blank');
         };
 
-        window.printSimpleTicket = () => {
-            const list = document.getElementById('ticket-items');
-            list.innerHTML = ''; let total = 0;
-            cart.forEach(i => {
-                total += i.totalPrice;
-                list.innerHTML += `<div class="flex justify-between"><span>${i.name} (${i.displayQty})</span><span>$${i.totalPrice}</span></div>`;
-            });
-            document.getElementById('ticket-total-val').innerText = `$${total.toLocaleString()}`;
-            document.getElementById('ticket-timestamp').innerText = new Date().toLocaleString('es-AR');
-            window.print();
-        };
+        window.printSimpleTicket = () => { window.print(); };
 
-        // ADMIN CRUD
+        // CRUD PRODUCTOS
         window.openEditProduct = (id) => {
             if (!isAdminAuthenticated) return;
             const p = products.find(x => x.id === id);
@@ -443,13 +418,13 @@
             document.getElementById('form-id').value = "";
             document.getElementById('form-name').value = "";
             document.getElementById('form-price').value = "";
-            document.getElementById('modal-title').innerText = "NUEVO PRODUCTO";
+            document.getElementById('modal-title').innerText = "Nuevo Item";
             document.getElementById('btn-delete').classList.add('hidden');
             document.getElementById('admin-modal').classList.remove('hidden');
         };
 
         window.submitProduct = async () => {
-            if (!isAdminAuthenticated) return;
+            if (!isAdminAuthenticated || !auth.currentUser) return;
             const id = document.getElementById('form-id').value || crypto.randomUUID();
             const data = {
                 name: document.getElementById('form-name').value,
@@ -461,17 +436,17 @@
             try {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id), data, { merge: true });
                 window.closeAdminModal();
-            } catch (e) { }
+            } catch (e) { console.error("Error al guardar:", e); }
         };
 
         window.handleDelete = async () => {
-            if (!isAdminAuthenticated) return;
+            if (!isAdminAuthenticated || !auth.currentUser) return;
             const id = document.getElementById('form-id').value;
-            if(confirm("¿Eliminar?")) {
+            if(confirm("¿Seguro que querés eliminar esto?")) {
                 try {
                     await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
                     window.closeAdminModal();
-                } catch (e) { }
+                } catch (e) { console.error("Error al borrar:", e); }
             }
         };
 
@@ -498,7 +473,7 @@
                         <input type="number" id="q-${p.id}" value="${p.unit === 'kg' ? '500' : '1'}" step="${p.unit === 'kg' ? '50' : '1'}" class="w-full bg-transparent text-center font-black outline-none text-gray-700 text-sm">
                         <span class="pr-3 text-[8px] font-black text-gray-200 uppercase">${p.unit === 'kg' ? 'gr' : 'un'}</span>
                     </div>
-                    <button onclick="window.addToCart('${p.id}')" class="w-full btn-green py-4 rounded-2xl text-[9px] font-black shadow-md uppercase tracking-widest active:scale-95 transition-all">Agregar</button>
+                    <button onclick="window.addToCart('${p.id}')" class="w-full btn-green py-4 rounded-2xl text-[9px] font-black shadow-md uppercase tracking-widest active:scale-95 transition-all font-black">Agregar</button>
                 `;
                 container.appendChild(div);
             });
@@ -525,7 +500,7 @@
                 list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
                     <div class="flex items-center gap-3">
                         <span class="text-2xl">${item.icon}</span>
-                        <div><p class="font-black text-[10px] text-gray-800 uppercase leading-none">${item.name}</p>
+                        <div><p class="font-black text-[10px] text-gray-800 uppercase leading-none font-black font-black">${item.name}</p>
                         <p class="text-[9px] text-gray-400 font-bold mt-1">${item.displayQty} x $${item.price.toLocaleString()}</p></div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -541,7 +516,6 @@
         window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); };
 
         document.getElementById('search-input').addEventListener('input', (e) => renderGrid('todos', e.target.value));
-        initAuth();
     </script>
 </body>
 </html>
