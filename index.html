@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>El Palacio de la Fruta - Pedidos Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap');
+        
+        :root {
+            --color-apple-red: #d62828;
+            --color-apple-yellow: #f9d423;
+            --color-apple-green: #2d6a4f;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #fcfcfc;
+            color: #1f2937;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header-main {
+            background-color: var(--color-apple-red);
+            color: var(--color-apple-yellow);
+            border-bottom: 4px solid var(--color-apple-yellow);
+        }
+
+        .footer-main {
+            background-color: var(--color-apple-red);
+            color: var(--color-apple-yellow);
+            border-top: 4px solid var(--color-apple-yellow);
+        }
+
+        .btn-green { background-color: var(--color-apple-green); color: white; }
+
+        .product-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        @media print {
+            .no-print { display: none !important; }
+            #ticket-print-area { display: block !important; width: 100%; font-family: monospace; }
+        }
+
+        .admin-active-border { outline: 6px solid var(--color-apple-red); }
+
+        #toast {
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            transform: translate(-50%, 10px);
+        }
+        #toast.show { transform: translate(-50%, 0); opacity: 1; }
+    </style>
+</head>
+<body class="pb-10 overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="header-main p-4 sticky top-0 z-50 shadow-md no-print">
+        <div class="container mx-auto flex justify-between items-center max-w-6xl">
+            <!-- Acceso Admin: 3 clics rápidos aquí -->
+            <div id="admin-trigger" class="flex items-center gap-2 cursor-pointer select-none active:scale-95 transition-transform" onclick="window.handleAdminClick()">
+                <i class="fas fa-apple-alt text-2xl"></i> 
+                <h1 class="text-lg font-black tracking-tighter uppercase leading-none">El Palacio de la Fruta</h1>
+            </div>
+            <div class="flex gap-3 items-center">
+                <div id="admin-badge" class="hidden bg-yellow-400 text-red-800 text-[9px] px-2 py-1 rounded-full font-black uppercase shadow-sm">Modo Dueño</div>
+                <button onclick="window.toggleCart()" class="relative p-2 text-white active:scale-90 transition-transform">
+                    <i class="fas fa-shopping-basket text-2xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-apple-green text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-black border-2 border-red-600">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Panel Admin -->
+    <div id="admin-panel" class="hidden bg-red-50 p-4 border-b-2 border-red-200 no-print">
+        <div class="container mx-auto flex flex-wrap gap-4 justify-between items-center max-w-6xl">
+            <span class="font-bold text-red-700 text-xs uppercase italic"><i class="fas fa-user-shield mr-2"></i>Gestión de Precios</span>
+            <div class="flex gap-2">
+                <button onclick="window.openAddProduct()" class="bg-red-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase shadow-sm">Nuevo Item</button>
+                <button onclick="window.handleLogout()" class="bg-gray-800 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buscador -->
+    <div class="container mx-auto p-4 no-print max-w-6xl">
+        <div class="relative mb-6">
+            <input type="text" id="search-input" placeholder="¿Qué necesitás hoy?" class="w-full p-4 pl-12 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-red-500 outline-none text-sm bg-white border border-gray-100">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        </div>
+
+        <nav class="flex gap-2 overflow-x-auto pb-4 no-scrollbar">
+            <button data-cat="todos" onclick="window.filterCategory('todos')" class="cat-btn bg-apple-red text-apple-yellow px-6 py-2 rounded-full font-black text-xs shadow-md whitespace-nowrap">TODOS</button>
+            <button data-cat="fruta" onclick="window.filterCategory('fruta')" class="cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap">FRUTAS</button>
+            <button data-cat="verdura" onclick="window.filterCategory('verdura')" class="cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap">VERDURAS</button>
+            <button data-cat="almacen" onclick="window.filterCategory('almacen')" class="cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap">ALMACÉN</button>
+            <button data-cat="carbon" onclick="window.filterCategory('carbon')" class="cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap">OTROS</button>
+        </nav>
+    </div>
+
+    <!-- Grilla -->
+    <main class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 no-print max-w-6xl" id="products-container">
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-main mt-16 p-8 md:p-12 no-print">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
+                <div class="space-y-4">
+                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Ubicación</h3>
+                    <div class="space-y-1">
+                        <p class="font-black text-white text-xl">Pres. Hipólito Yrigoyen 2124</p>
+                        <p class="text-xs font-bold text-white/80 uppercase">Florida, Buenos Aires</p>
+                    </div>
+                    <a href="https://maps.app.goo.gl/gbHA4MJhwgeaN9e36" target="_blank" class="inline-flex items-center gap-2 bg-white text-red-600 px-5 py-2.5 rounded-full font-black text-[10px] shadow-lg active:scale-95 transition-transform uppercase">
+                        <i class="fas fa-map-marker-alt"></i> Cómo llegar
+                    </a>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Teléfonos</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fas fa-phone-alt text-xl"></i>
+                            <div>
+                                <p class="font-black text-xl leading-none">4796-4530</p>
+                                <p class="text-[9px] uppercase font-bold text-white/70">Teléfono Fijo del local</p>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/5491150126496" target="_blank" class="flex items-center justify-center md:justify-start gap-3 active:scale-95 transition-transform">
+                            <i class="fab fa-whatsapp text-2xl text-green-400"></i>
+                            <div>
+                                <p class="font-bold text-xl leading-none">+54 9 11 5012-6496</p>
+                                <p class="text-[9px] uppercase font-bold text-white/70">WhatsApp Pedidos</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-black text-white uppercase text-sm tracking-widest border-b-2 border-yellow-400 pb-1 inline-block">Atención</h3>
+                    <div class="bg-black/10 p-5 rounded-2xl w-full">
+                        <p class="font-black text-xs uppercase text-white/90 mb-1">Lunes a Sábados</p>
+                        <p class="text-2xl font-black text-yellow-300 leading-tight">07:00 a 20:30 hs</p>
+                        <p class="text-[9px] mt-2 italic font-bold text-white/50 uppercase">Domingos y feriados cerrado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12 pt-6 border-t border-yellow-200/10 text-[9px] font-bold uppercase tracking-widest opacity-40">
+                © 2024 EL PALACIO DE LA FRUTA
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal Login Seguro -->
+    <div id="admin-login-modal" class="fixed inset-0 bg-black/95 z-[100] hidden flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-8 shadow-2xl border-2 border-apple-yellow">
+            <div class="text-center mb-6">
+                <i class="fas fa-user-shield text-red-600 text-3xl mb-2"></i>
+                <h2 class="font-black uppercase text-gray-800 text-sm tracking-widest">Acceso Dueño</h2>
+            </div>
+            <form id="login-form" class="space-y-4" onsubmit="window.handleLoginSubmit(event)">
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Email</label>
+                    <input type="email" id="login-email" required class="w-full p-4 bg-gray-50 rounded-xl border border-gray-100 outline-none text-sm focus:ring-2 focus:ring-red-500">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black text-gray-400 uppercase ml-2 mb-1 block">Contraseña</label>
+                    <input type="password" id="login-password" required class="w-full p-4 bg-gray-50 rounded-xl border border-gray-100 outline-none text-sm focus:ring-2 focus:ring-red-500">
+                </div>
+                <div id="login-error" class="text-red-500 text-[10px] font-bold text-center h-4"></div>
+                <div class="flex gap-2 pt-2">
+                    <button type="button" onclick="window.closeLogin()" class="flex-1 bg-gray-100 py-4 rounded-xl font-black text-gray-400 uppercase text-[10px]">Cancelar</button>
+                    <button type="submit" id="login-btn" class="flex-1 bg-red-600 text-white py-4 rounded-xl font-black shadow-lg uppercase text-[10px]">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Carrito -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/80 z-[60] hidden flex items-end sm:items-center justify-center no-print">
+        <div class="bg-white w-full max-w-lg rounded-t-[2rem] sm:rounded-[2rem] p-6 max-h-[90vh] overflow-y-auto border-t-8 border-apple-red shadow-2xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-red-700 uppercase italic tracking-tighter">Mi Pedido</h2>
+                <button onclick="window.toggleCart()" class="text-gray-400 text-4xl p-2">&times;</button>
+            </div>
+            <div id="cart-list" class="space-y-2 mb-6"></div>
+
+            <div class="mb-6">
+                <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 mb-2 block font-black">¿Alguna aclaración?</label>
+                <textarea id="order-notes" rows="2" class="w-full p-4 bg-gray-50 rounded-2xl border border-gray-100 outline-none text-sm focus:ring-2 focus:ring-red-500 transition-all no-scrollbar" placeholder="Ej: Timbre no funciona..."></textarea>
+            </div>
+
+            <div class="bg-green-50 p-5 rounded-2xl mb-6 border border-green-100">
+                <button id="btn-location" onclick="window.captureGPS()" class="w-full text-[10px] bg-white border-2 border-apple-green text-apple-green px-4 py-3 rounded-xl font-black active:bg-green-600 active:text-white uppercase tracking-widest">UBICACIÓN GPS</button>
+                <p id="location-ok" class="hidden text-[10px] text-green-700 font-black mt-3 text-center uppercase tracking-widest"><i class="fas fa-check"></i> Ubicación adjunta</p>
+            </div>
+
+            <div class="border-t pt-6">
+                <div class="flex justify-between text-2xl font-black mb-6">
+                    <span class="text-gray-400 text-xs self-center uppercase tracking-widest font-black">Total:</span>
+                    <span class="text-apple-red" id="cart-total-display">$0</span>
+                </div>
+                <div class="grid grid-cols-2 gap-4 pb-4">
+                    <button onclick="window.printSimpleTicket()" class="bg-gray-100 text-gray-600 font-black py-4 rounded-xl active:bg-gray-200 uppercase text-[10px] tracking-widest">RESUMEN</button>
+                    <button onclick="window.sendToWhatsApp()" class="bg-green-600 text-white font-black py-4 rounded-xl shadow-lg active:bg-green-700 uppercase text-[10px] tracking-widest flex items-center justify-center gap-2">PEDIR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editor -->
+    <div id="admin-modal" class="fixed inset-0 bg-black/95 z-[110] hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white w-full max-w-md rounded-[2rem] p-8 border-4 border-apple-yellow shadow-2xl">
+            <h2 id="modal-title" class="text-xl font-black mb-8 text-red-700 text-center uppercase tracking-widest italic">Editor</h2>
+            <input type="hidden" id="form-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Nombre</label>
+                    <input type="text" id="form-name" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Precio ($)</label>
+                        <input type="number" id="form-price" class="w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-black text-red-600 text-sm focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Unidad</label>
+                        <select id="form-unit" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                            <option value="kg">Por Kilo</option>
+                            <option value="unidad">Unidad</option>
+                            <option value="maple">Maple</option>
+                            <option value="bolsa">Bolsa</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[9px] font-black text-gray-400 uppercase ml-4">Categoría</label>
+                    <select id="form-cat" class="w-full p-4 bg-gray-50 rounded-xl border-none font-bold text-sm focus:ring-2 focus:ring-red-500">
+                        <option value="fruta">Fruta</option>
+                        <option value="verdura">Verdura</option>
+                        <option value="almacen">Almacén/Envasados</option>
+                        <option value="carbon">Otros/Carbón</option>
+                    </select>
+                </div>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="window.closeAdminModal()" class="flex-1 bg-gray-100 py-4 rounded-2xl font-black text-gray-500 uppercase text-[10px]">Cerrar</button>
+                    <button onclick="window.submitProduct()" class="flex-1 bg-red-600 text-white py-4 rounded-2xl font-black shadow-lg uppercase text-[10px]">Guardar</button>
+                </div>
+                <button onclick="window.handleDelete()" id="btn-delete" class="w-full text-red-400 text-[9px] font-black mt-4 uppercase pt-4 border-t border-gray-100">Eliminar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notificación -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-gray-900/95 text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-widest opacity-0 pointer-events-none z-[100]">¡Añadido!</div>
+
+    <!-- Ticket Impresión -->
+    <div id="ticket-print-area" class="hidden p-8 bg-white text-black font-mono text-xs leading-tight">
+        <div class="text-center border-b-2 border-black pb-4 mb-4">
+            <h2 class="text-base font-bold uppercase tracking-tighter">EL PALACIO DE LA FRUTA</h2>
+            <p id="ticket-timestamp"></p>
+        </div>
+        <div id="ticket-items" class="mb-6 space-y-1"></div>
+        <div class="border-t-2 border-black pt-4 font-bold flex justify-between text-base">
+            <span>TOTAL:</span>
+            <span id="ticket-total-val"></span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, onSnapshot, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'palacio-fruta-mobile';
+        const WHATSAPP_TEL = "5491150126496";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let products = [];
+        let cart = [];
+        let gpsUrl = null;
+        let isAdminAuthenticated = false;
+        let adminClickCount = 0;
+        let adminClickTimer = null;
+        let unsubscribeProducts = null;
+
+        // AUTH & LOAD (Regla 3)
+        onAuthStateChanged(auth, async (user) => {
+            if (unsubscribeProducts) { unsubscribeProducts(); unsubscribeProducts = null; }
+
+            if (user) {
+                isAdminAuthenticated = !user.isAnonymous;
+                if (isAdminAuthenticated) { enableAdminUI(); } 
+                else { disableAdminUI(); }
+                loadProducts(user);
+            } else {
+                initAuth();
+            }
+        });
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else { await signInAnonymously(auth); }
+            } catch (e) { console.error(e); }
+        }
+
+        function loadProducts(user) {
+            if (!user) return;
+            const prodRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
+            unsubscribeProducts = onSnapshot(prodRef, (snapshot) => {
+                products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderGrid();
+            }, (error) => { console.warn("Permissions error:", error.message); });
+        }
+
+        function enableAdminUI() {
+            document.body.classList.add('admin-active-border');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            document.getElementById('admin-badge').classList.remove('hidden');
+        }
+
+        function disableAdminUI() {
+            document.body.classList.remove('admin-active-border');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('admin-badge').classList.add('hidden');
+        }
+
+        // ACCESO ADMIN
+        window.handleAdminClick = () => {
+            adminClickCount++;
+            clearTimeout(adminClickTimer);
+            adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 800);
+            if (adminClickCount >= 3) {
+                adminClickCount = 0;
+                if (isAdminAuthenticated) { enableAdminUI(); } 
+                else { document.getElementById('admin-login-modal').classList.remove('hidden'); }
+            }
+        };
+
+        window.handleLoginSubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+            const errorEl = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
+            errorEl.innerText = ""; btn.disabled = true; btn.innerText = "VERIFICANDO...";
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.closeLogin();
+            } catch (error) { errorEl.innerText = "Credenciales incorrectas"; } 
+            finally { btn.disabled = false; btn.innerText = "ENTRAR"; }
+        };
+
+        window.handleLogout = async () => {
+            try { await signOut(auth); location.reload(); } catch (e) { }
+        };
+
+        window.closeLogin = () => document.getElementById('admin-login-modal').classList.add('hidden');
+        window.toggleCart = () => document.getElementById('cart-modal').classList.toggle('hidden');
+
+        // UI ACTIONS
+        window.filterCategory = (category) => {
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.className = "cat-btn bg-white text-gray-500 px-6 py-2 rounded-full font-black text-xs border border-gray-100 whitespace-nowrap";
+                if(b.getAttribute('data-cat') === category) {
+                    b.className = "cat-btn bg-apple-red text-apple-yellow px-6 py-2 rounded-full font-black text-xs shadow-md whitespace-nowrap";
+                }
+            });
+            renderGrid(category);
+        };
+
+        window.captureGPS = () => {
+            const btn = document.getElementById('btn-location');
+            btn.innerText = "LOCALIZANDO...";
+            navigator.geolocation.getCurrentPosition((pos) => {
+                gpsUrl = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                document.getElementById('location-ok').classList.remove('hidden');
+                btn.classList.add('hidden');
+            }, () => { alert("Activa el GPS."); btn.innerText = "REINTENTAR"; });
+        };
+
+        window.sendToWhatsApp = () => {
+            if (cart.length === 0) return;
+            const notes = document.getElementById('order-notes').value.trim();
+            let text = `*🍎 EL PALACIO DE LA FRUTA 🍎*\n_Pedido Online_\n\n`;
+            let total = 0;
+            cart.forEach(item => {
+                text += `• *${item.name}*\n   ${item.displayQty} ➔ *$${item.totalPrice.toLocaleString()}*\n\n`;
+                total += item.totalPrice;
+            });
+            if (notes) text += `📝 *ACLARACIÓN:* ${notes}\n\n`;
+            text += `*TOTAL ESTIMADO: $${total.toLocaleString()}*`;
+            if (gpsUrl) text += `\n\n📍 *ENTREGAR AQUÍ:* ${gpsUrl}`;
+            window.open(`https://wa.me/${WHATSAPP_TEL}?text=${encodeURIComponent(text)}`, '_blank');
+        };
+
+        window.printSimpleTicket = () => {
+            const list = document.getElementById('ticket-items');
+            list.innerHTML = ''; let total = 0;
+            cart.forEach(i => {
+                total += i.totalPrice;
+                list.innerHTML += `<div class="flex justify-between"><span>${i.name} (${i.displayQty})</span><span>$${i.totalPrice}</span></div>`;
+            });
+            document.getElementById('ticket-total-val').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('ticket-timestamp').innerText = new Date().toLocaleString('es-AR');
+            window.print();
+        };
+
+        // ADMIN CRUD
+        window.openEditProduct = (id) => {
+            if (!isAdminAuthenticated) return;
+            const p = products.find(x => x.id === id);
+            document.getElementById('form-id').value = p.id;
+            document.getElementById('form-name').value = p.name;
+            document.getElementById('form-price').value = p.price;
+            document.getElementById('form-unit').value = p.unit;
+            document.getElementById('form-cat').value = p.category;
+            document.getElementById('modal-title').innerText = "Editar " + p.name;
+            document.getElementById('btn-delete').classList.remove('hidden');
+            document.getElementById('admin-modal').classList.remove('hidden');
+        };
+
+        window.openAddProduct = () => {
+            if (!isAdminAuthenticated) return;
+            document.getElementById('form-id').value = "";
+            document.getElementById('form-name').value = "";
+            document.getElementById('form-price').value = "";
+            document.getElementById('modal-title').innerText = "NUEVO PRODUCTO";
+            document.getElementById('btn-delete').classList.add('hidden');
+            document.getElementById('admin-modal').classList.remove('hidden');
+        };
+
+        window.submitProduct = async () => {
+            if (!isAdminAuthenticated) return;
+            const id = document.getElementById('form-id').value || crypto.randomUUID();
+            const data = {
+                name: document.getElementById('form-name').value,
+                price: parseFloat(document.getElementById('form-price').value),
+                unit: document.getElementById('form-unit').value,
+                category: document.getElementById('form-cat').value,
+                icon: getIconForCat(document.getElementById('form-cat').value)
+            };
+            try {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id), data, { merge: true });
+                window.closeAdminModal();
+            } catch (e) { }
+        };
+
+        window.handleDelete = async () => {
+            if (!isAdminAuthenticated) return;
+            const id = document.getElementById('form-id').value;
+            if(confirm("¿Eliminar?")) {
+                try {
+                    await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'products', id));
+                    window.closeAdminModal();
+                } catch (e) { }
+            }
+        };
+
+        window.closeAdminModal = () => document.getElementById('admin-modal').classList.add('hidden');
+
+        function getIconForCat(cat) {
+            const map = { 'fruta': '🍎', 'verdura': '🥦', 'almacen': '📦', 'carbon': '🔥' };
+            return map[cat] || '🍏';
+        }
+
+        function renderGrid(category = 'todos', search = '') {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            const filtered = products.filter(p => (category === 'todos' || p.category === category) && p.name.toLowerCase().includes(search.toLowerCase()));
+            filtered.forEach(p => {
+                const div = document.createElement('div');
+                div.className = `product-card p-5 flex flex-col items-center text-center relative border-2 ${isAdminAuthenticated ? 'border-red-500' : 'border-transparent'}`;
+                div.innerHTML = `
+                    ${isAdminAuthenticated ? `<button onclick="window.openEditProduct('${p.id}')" class="absolute top-2 right-2 bg-red-600 text-white p-3 rounded-full shadow-lg z-10"><i class="fas fa-edit text-[10px]"></i></button>` : ''}
+                    <div class="text-5xl mb-4 mt-2 select-none">${p.icon || '📦'}</div>
+                    <h3 class="font-black text-gray-800 text-[10px] mb-1 uppercase tracking-tighter leading-none">${p.name}</h3>
+                    <p class="text-red-600 font-black text-xl mb-4">$${p.price.toLocaleString()}<span class="text-[9px] text-gray-300 font-normal"> /${p.unit}</span></p>
+                    <div class="w-full flex items-center bg-gray-50 rounded-2xl mb-4 p-1 border border-gray-100">
+                        <input type="number" id="q-${p.id}" value="${p.unit === 'kg' ? '500' : '1'}" step="${p.unit === 'kg' ? '50' : '1'}" class="w-full bg-transparent text-center font-black outline-none text-gray-700 text-sm">
+                        <span class="pr-3 text-[8px] font-black text-gray-200 uppercase">${p.unit === 'kg' ? 'gr' : 'un'}</span>
+                    </div>
+                    <button onclick="window.addToCart('${p.id}')" class="w-full btn-green py-4 rounded-2xl text-[9px] font-black shadow-md uppercase tracking-widest active:scale-95 transition-all">Agregar</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.addToCart = (id) => {
+            const p = products.find(x => x.id === id);
+            const qtyVal = parseFloat(document.getElementById(`q-${id}`).value);
+            if (!qtyVal || qtyVal <= 0) return;
+            const priceFinal = p.unit === 'kg' ? (p.price / 1000) * qtyVal : p.price * qtyVal;
+            const displayQty = p.unit === 'kg' ? `${qtyVal}gr` : `${qtyVal} un.`;
+            cart.push({ ...p, quantity: qtyVal, displayQty, totalPrice: priceFinal });
+            updateCartUI();
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 1500);
+        };
+
+        function updateCartUI() {
+            const list = document.getElementById('cart-list');
+            list.innerHTML = ''; let total = 0;
+            cart.forEach((item, index) => {
+                total += item.totalPrice;
+                list.innerHTML += `<div class="flex justify-between items-center bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${item.icon}</span>
+                        <div><p class="font-black text-[10px] text-gray-800 uppercase leading-none">${item.name}</p>
+                        <p class="text-[9px] text-gray-400 font-bold mt-1">${item.displayQty} x $${item.price.toLocaleString()}</p></div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-black text-red-600 text-sm">$${item.totalPrice.toLocaleString()}</span>
+                        <button onclick="window.removeFromCart(${index})" class="text-red-300 active:text-red-600 p-2"><i class="fas fa-trash-alt text-xs"></i></button>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('cart-count').innerText = cart.length;
+            document.getElementById('cart-total-display').innerText = `$${total.toLocaleString()}`;
+        }
+
+        window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); };
+
+        document.getElementById('search-input').addEventListener('input', (e) => renderGrid('todos', e.target.value));
+        initAuth();
+    </script>
+</body>
+</html>
