@@ -228,7 +228,8 @@
             <input type="hidden" id="form-id">
             <div class="space-y-4">
                 <div class="flex gap-2">
-                    <input type="text" id="form-icon" placeholder="🍎" title="Pega un emoji aquí" class="w-16 p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-center text-xl focus:ring-2 focus:ring-red-500">
+                    <input type="hidden" id="form-icon" value="🍎">
+                    <button type="button" id="icon-selector-btn" onclick="window.openEmojiPicker()" title="Cambiar ícono" class="w-16 bg-gray-50 rounded-xl border border-gray-200 font-bold text-center text-3xl active:scale-90 transition-transform flex items-center justify-center hover:bg-gray-100 cursor-pointer shadow-inner">🍎</button>
                     <input type="text" id="form-name" placeholder="Nombre" class="flex-1 w-full p-4 bg-gray-50 rounded-xl border-none outline-none font-bold text-sm focus:ring-2 focus:ring-red-500">
                 </div>
                 <div class="grid grid-cols-2 gap-4">
@@ -251,6 +252,19 @@
                     <button onclick="window.submitProduct()" class="flex-1 bg-red-600 text-white py-4 rounded-xl font-black shadow-lg uppercase text-[10px]">Guardar</button>
                 </div>
                 <button onclick="window.handleDelete()" id="btn-delete" class="w-full text-red-400 text-[9px] font-black mt-4 uppercase pt-4 border-t border-gray-100 font-black">Eliminar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Menú de Emojis -->
+    <div id="emoji-modal" class="fixed inset-0 bg-black/95 z-[120] hidden flex items-center justify-center p-4 no-print backdrop-blur-sm">
+        <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl border-2 border-apple-yellow flex flex-col max-h-[80vh]">
+            <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-2">
+                <h3 class="font-black text-red-700 uppercase tracking-widest text-xs">Elegir Ícono</h3>
+                <button onclick="window.closeEmojiPicker()" class="text-gray-400 hover:text-red-500 text-3xl p-1 leading-none active:scale-90">&times;</button>
+            </div>
+            <div id="emoji-grid" class="grid grid-cols-5 gap-3 overflow-y-auto no-scrollbar pb-2 text-3xl text-center">
+                <!-- Se inyectan con JS -->
             </div>
         </div>
     </div>
@@ -402,12 +416,48 @@
 
         window.printSimpleTicket = () => { window.print(); };
 
+        // LISTA DE EMOJIS (LA DESPENSA)
+        const emojiList = [
+            '🍎', '🍏', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝',
+            '🍅', '🍆', '🥑', '🥦', '🥬', '🥒', '🌶️', '🫑', '🌽', '🥕', '🧄', '🧅', '🥔', '🍠', '🍄', '🥜',
+            '🥐', '🥖', '🍞', '🥚', '🧀', '🥓', '🥩', '🍗', '🍖', '🥫', '🍯', '🧂', '🧈', '🥫',
+            '🧊', '🥛', '☕', '🍵', '🧃', '🥤', '🧋', '🧉', '🍺', '🍻', '🍷', '🍾',
+            '🛍️', '🛒', '📦', '🔥', '🪵', '🪴', '🧹', '🧻', '🧽', '🧼'
+        ];
+
+        window.openEmojiPicker = () => {
+            const grid = document.getElementById('emoji-grid');
+            grid.innerHTML = '';
+            emojiList.forEach(e => {
+                const btn = document.createElement('button');
+                btn.className = 'hover:bg-gray-100 p-2 rounded-xl active:scale-90 transition-transform cursor-pointer border border-transparent hover:border-gray-200';
+                btn.innerText = e;
+                btn.onclick = () => window.selectEmoji(e);
+                grid.appendChild(btn);
+            });
+            document.getElementById('emoji-modal').classList.remove('hidden');
+        };
+
+        window.closeEmojiPicker = () => {
+            document.getElementById('emoji-modal').classList.add('hidden');
+        };
+
+        window.selectEmoji = (emoji) => {
+            document.getElementById('form-icon').value = emoji;
+            document.getElementById('icon-selector-btn').innerText = emoji;
+            window.closeEmojiPicker();
+        };
+
         // CRUD PRODUCTOS
         window.openEditProduct = (id) => {
             if (!isAdminAuthenticated) return;
             const p = products.find(x => x.id === id);
             document.getElementById('form-id').value = p.id;
-            document.getElementById('form-icon').value = p.icon || getIconForCat(p.category);
+            
+            const iconVal = p.icon || getIconForCat(p.category);
+            document.getElementById('form-icon').value = iconVal;
+            document.getElementById('icon-selector-btn').innerText = iconVal;
+
             document.getElementById('form-name').value = p.name;
             document.getElementById('form-price').value = p.price;
             document.getElementById('form-unit').value = p.unit;
@@ -421,6 +471,7 @@
             if (!isAdminAuthenticated) return;
             document.getElementById('form-id').value = "";
             document.getElementById('form-icon').value = "🍎";
+            document.getElementById('icon-selector-btn').innerText = "🍎";
             document.getElementById('form-name').value = "";
             document.getElementById('form-price').value = "";
             document.getElementById('modal-title').innerText = "Nuevo Item";
